@@ -1,5 +1,7 @@
 package SCSSoftwareTest;
 
-public class exampleTest {
+import org.lsmr.selfcheckout.Banknote;
 
+public class exampleTest {
+	Banknote b;
 }
