@@ -9,6 +9,8 @@ import org.lsmr.selfcheckout.devices.BanknoteStorageUnit;
 import org.lsmr.selfcheckout.devices.BanknoteValidator;
 import org.lsmr.selfcheckout.devices.observers.*;
 
+import SCSSoftware.BanknoteRunner;
+
 public class BanknoteObserver implements BanknoteSlotObserver, BanknoteDispenserObserver, BanknoteStorageUnitObserver, BanknoteValidatorObserver{
 
 	BanknoteRunner runner;
@@ -30,8 +32,8 @@ public class BanknoteObserver implements BanknoteSlotObserver, BanknoteDispenser
 
 	@Override
 	public void validBanknoteDetected(BanknoteValidator validator, Currency currency, int value) {
-		// TODO Auto-generated method stub
-		
+		// A valid banknote is detected
+		runner.addValidNote(currency, value);
 	}
 
 	@Override

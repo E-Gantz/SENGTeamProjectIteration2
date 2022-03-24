@@ -3,7 +3,10 @@ import softwareObservers.BanknoteObserver;
 import org.lsmr.selfcheckout.devices.BanknoteSlot;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Currency;
 
+import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.devices.BanknoteDispenser;
 import org.lsmr.selfcheckout.devices.BanknoteStorageUnit;
 import org.lsmr.selfcheckout.devices.BanknoteValidator;
@@ -61,4 +64,13 @@ public class BanknoteRunner {
 	public ArrayList<Banknote> getBanknoteCart(){
 		return this.banknoteCart;
 	}
+
+	// Add a valid banknote to the paid total and the banknote cart
+	public void addValidNote(Currency currency, int value) {
+		Banknote addedNote = new Banknote(currency, value);
+		this.banknoteCart.add(addedNote);
+		this.paidTotal.add(BigDecimal.valueOf(addedNote.getValue()));
+	}
+	
+	
 }
