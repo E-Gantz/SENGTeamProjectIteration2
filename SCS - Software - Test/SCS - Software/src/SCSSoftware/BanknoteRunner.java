@@ -21,6 +21,7 @@ public class BanknoteRunner {
 	private BanknoteDispenser noteDispenser;
 	private BanknoteStorageUnit noteStorage;
 	private BanknoteValidator noteValidator;
+	private Banknote validNote;
 	
 	// Paid total is the amount of currency that has been inputted and successfully validated in the machine
 	// Checkout total is the amount of currency that needs to be paid
@@ -65,12 +66,13 @@ public class BanknoteRunner {
 		return this.banknoteCart;
 	}
 
-	// Add a valid banknote to the paid total and the banknote cart
-	public void addValidNote(Currency currency, int value) {
-		Banknote addedNote = new Banknote(currency, value);
-		this.banknoteCart.add(addedNote);
-		this.paidTotal.add(BigDecimal.valueOf(addedNote.getValue()));
+	// Set the current valid note as the most recent valid note given from the validator
+	public void validNote(Currency currency, int value) {
+		this.validNote = new Banknote(currency, value);
 	}
 	
-	
+	// Add the valid note to the banknote cart as well as the running total paid
+	public void addValidNote() {
+		paidTotal.add(BigDecimal.valueOf(validNote.getValue()));
+	}
 }

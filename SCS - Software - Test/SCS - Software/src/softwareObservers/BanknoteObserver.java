@@ -33,13 +33,12 @@ public class BanknoteObserver implements BanknoteSlotObserver, BanknoteDispenser
 	@Override
 	public void validBanknoteDetected(BanknoteValidator validator, Currency currency, int value) {
 		// A valid banknote is detected
-		runner.addValidNote(currency, value);
+		runner.validNote(currency, value);
 	}
 
 	@Override
 	public void invalidBanknoteDetected(BanknoteValidator validator) {
-		// TODO Auto-generated method stub
-		
+		// An invalid banknote is detected
 	}
 
 	@Override
@@ -50,8 +49,8 @@ public class BanknoteObserver implements BanknoteSlotObserver, BanknoteDispenser
 
 	@Override
 	public void banknoteAdded(BanknoteStorageUnit unit) {
-		// TODO Auto-generated method stub
-		
+		// A valid banknote was added into the storage
+		runner.addValidNote();
 	}
 
 	@Override
