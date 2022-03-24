@@ -10,11 +10,13 @@ public class ProductCart {
 	private ArrayList<BarcodedProduct> cart;
 	private ArrayList<String> items;
 	private BigDecimal totalPrice;
+	private double totalExpectedWeight;
 	
 	public ProductCart() {
 		cart = new ArrayList<BarcodedProduct>();
 		items = new ArrayList<String>();
 		totalPrice = new BigDecimal(0);
+		totalExpectedWeight = 0.0;
 	}
 	
 	public void addToCart(BarcodedProduct prod) {
@@ -22,6 +24,7 @@ public class ProductCart {
 		String nameAndPrice = "$" + prod.getDescription() + " " + prod.getPrice().toPlainString();
 		items.add(nameAndPrice); // string added should look like "Milk 10" or something.
 		totalPrice = totalPrice.add(prod.getPrice());
+		totalExpectedWeight += prod.getExpectedWeight();
 	}
 	
 	public void removeFromCart(BarcodedProduct prod) {
@@ -40,5 +43,9 @@ public class ProductCart {
 	
 	public ArrayList<BarcodedProduct> getCart(){
 		return this.cart;
+	}
+	
+	public double getTotalExpectedWeight() {
+		return this.totalExpectedWeight;
 	}
 }
