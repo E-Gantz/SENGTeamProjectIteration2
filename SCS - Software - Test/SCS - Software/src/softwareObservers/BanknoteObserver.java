@@ -11,6 +11,11 @@ import org.lsmr.selfcheckout.devices.observers.*;
 
 public class BanknoteObserver implements BanknoteSlotObserver, BanknoteDispenserObserver, BanknoteStorageUnitObserver, BanknoteValidatorObserver{
 
+	BanknoteRunner runner;
+	public BanknoteObserver(BanknoteRunner runner) {
+		this.runner = runner;
+	}
+	
 	@Override
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
