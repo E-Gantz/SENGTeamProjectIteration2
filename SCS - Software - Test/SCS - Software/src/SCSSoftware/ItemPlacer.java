@@ -1,5 +1,7 @@
 package SCSSoftware;
 
+import java.util.Timer;
+
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.BarcodeScanner;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
@@ -13,12 +15,14 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	private double currentWeight;
 	private ProductCart pcart;
 	private BarcodeScanner scanner;
+	private Boolean NotInBags;
 	
 	public ItemPlacer(BarcodeScanner scanner, ProductCart pcart) {
 		this.scanner = scanner;
 		this.pcart = pcart;
 		this.previousWeight = 0.0;
 		this.currentWeight = 0.0;
+		this.NotInBags = false;
 	}
 	
 
@@ -59,6 +63,24 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	public void outOfOverload(ElectronicScale scale) {
 		//Auto-generated method stub
 		//remove the "too heavy!" message
+	}
+	
+	public void startTimer() {
+		Timer timer = new Timer();
+		BaggingTimeout timeout = new BaggingTimeout(pcart, this);
+		timer.schedule(timeout,50, 500); //this should run the BaggingTimeout run() method every .5 seconds.
+	}
+	
+	public double getBagWeight() {
+		return this.previousWeight;
+	}
+	
+	public void BagTimeout() {
+		NotInBags = true;
+	}
+	
+	public Boolean getTimeoutStatus() {
+		return this.NotInBags;
 	}
 
 }

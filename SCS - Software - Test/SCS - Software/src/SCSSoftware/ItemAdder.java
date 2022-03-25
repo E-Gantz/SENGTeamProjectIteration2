@@ -10,10 +10,12 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 public class ItemAdder implements BarcodeScannerObserver{
 	public ProductInventory productInventory;
 	public ProductCart cart;
+	public ItemPlacer placer;
 	
-	public ItemAdder(ProductInventory inventory, ProductCart cart) {
+	public ItemAdder(ProductInventory inventory, ProductCart cart, ItemPlacer placer) {
 		this.productInventory = inventory;
 		this.cart = cart;
+		this.placer = placer;
 	}
 
 	@Override
@@ -35,6 +37,7 @@ public class ItemAdder implements BarcodeScannerObserver{
 		BarcodedProduct scannedProduct = productInventory.getInventory(barcode);
 		cart.addToCart(scannedProduct);
 		barcodeScanner.disable();
+		placer.startTimer();
 		//start some kind of 5 second timer here for the item to be added to the bags
 	}
 
