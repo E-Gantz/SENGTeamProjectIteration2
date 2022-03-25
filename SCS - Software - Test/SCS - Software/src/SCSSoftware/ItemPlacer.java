@@ -43,7 +43,7 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	public void weightChanged(ElectronicScale scale, double weightInGrams) throws SimulationException{
 		expectedWeight = pcart.getCart().get((pcart.getCart().size())-1).getExpectedWeight();//this gets the weight of the item most recently added to the cart.
 		currentWeight = weightInGrams;
-		if(currentWeight == previousWeight + expectedWeight) {
+		if(currentWeight >= previousWeight + expectedWeight) {
 			this.previousWeight = currentWeight;
 			expectedWeight = 0.0;
 			this.scanner.enable();
