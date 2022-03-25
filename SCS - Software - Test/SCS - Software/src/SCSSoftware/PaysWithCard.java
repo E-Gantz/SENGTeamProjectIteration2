@@ -70,11 +70,11 @@ public class PaysWithCard implements CardReaderObserver {
 		
 	}
 
-	// public void paysWithCredit(Card card) 
-	// {
-	// 	Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
-	// 	Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
-	// }
+	public void paysWithCredit(Card card) 
+	{
+		Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
+		Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
+	}
 
 	// public void paysWithCredit(Card card) 
 	// {
