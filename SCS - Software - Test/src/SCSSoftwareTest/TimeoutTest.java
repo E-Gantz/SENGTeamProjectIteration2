@@ -11,6 +11,7 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.Numeral;
 import org.lsmr.selfcheckout.devices.BarcodeScanner;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
+import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
@@ -35,6 +36,7 @@ public class TimeoutTest {
 	public int cartSize;
 	public ItemPlacer placer;
 	public ElectronicScale scale;
+	public double expectedWeight;
 
 	@Before
 	public void setUp() {
@@ -66,8 +68,8 @@ public class TimeoutTest {
 		cartSize = 0;
 	}
 	
-	@Test
-	public void ItemPlacedInTime() throws InterruptedException {
+	@Test (timeout = 10000)
+	public void ItemPlacedInTime() throws InterruptedException, OverloadException {
 		scanner.scan(item1);
 		//next two if statements simulate someone retrying to scan a couple times if the first scan doesn't work
 		if (cart.getItemNames().size() == cartSize) {
@@ -79,7 +81,9 @@ public class TimeoutTest {
 		TimeUnit.SECONDS.sleep(2);
 		scale.add(item1);
 		TimeUnit.SECONDS.sleep(3);
-		assertTrue(true);
+		expectedWeight = 3;
+		
+		assertEquals(scale.getCurrentWeight(), expectedWeight, 0.5);
 	}
 	
 	@Test //(expected = SimulationException.class)	//this throws an exception in a different thread, so this won't work to catch it.
@@ -95,5 +99,137 @@ public class TimeoutTest {
 		TimeUnit.SECONDS.sleep(5);
 		assertTrue(placer.getTimeoutStatus());
 	}
+	
+	@Test (timeout = 10000)
+	public void ItemPlacedAfter() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		//next two if statements simulate someone retrying to scan a couple times if the first scan doesn't work
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(3);
+		scale.add(item1);
+		expectedWeight = 3;
+		
+		assertTrue(placer.getTimeoutStatus());
+	}
+	
+	@Test (timeout = 10000)
+	public void ItemPlacedInstantly() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		
+		scale.add(item1);
+		TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(3);
+		expectedWeight = 3;
+		
+		assertEquals(scale.getCurrentWeight(), expectedWeight, 0.5);
+	}
+	
+	@Test (timeout = 10000)
+	public void MultiItemPlacedInTime() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		
+		scale.add(item1);
+		
+		for (int i = 0; i < 2; i++) {
+			if (cart.getItemNames().size() == cartSize) {
+				scanner.scan(item2);
+			}
+		}
+		
+		TimeUnit.SECONDS.sleep(2);
+// Fails here? ItemAdder rejects it's weight
+		scale.add(item2);
+		TimeUnit.SECONDS.sleep(3);
+		expectedWeight = 7;
+		
+		assertEquals(scale.getCurrentWeight(), expectedWeight, 0.5);
+	}
+	
+	@Test (timeout = 10000)
+	public void MultiItemNotPlaced() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+	
+		for (int i = 0; i < 2; i++) {
+			if (cart.getItemNames().size() == cartSize) {
+				scanner.scan(item2);
+			}
+		}
+		
+		TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(3);
+		
+		assertTrue(placer.getTimeoutStatus());
+	}
+	@Test (timeout = 10000)
+	public void MultiItemPlacedAfter() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+	
+		for (int i = 0; i < 2; i++) {
+			if (cart.getItemNames().size() == cartSize) {
+				scanner.scan(item2);
+			}
+		}
+		
+		TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(3);
+		scale.add(item1);
+		scale.add(item2);
+		
+		assertTrue(placer.getTimeoutStatus());
+	}
+	
+	@Test
+	public void MultiItemPlaceHalf() throws InterruptedException, OverloadException {
+		scanner.scan(item1);
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+	
+		for (int i = 0; i < 2; i++) {
+			if (cart.getItemNames().size() == cartSize) {
+				scanner.scan(item2);
+			}
+		}
+		
+		TimeUnit.SECONDS.sleep(2);
+		scale.add(item1);
+		TimeUnit.SECONDS.sleep(3);
 
+		scale.add(item2);
+		
+		assertTrue(placer.getTimeoutStatus());
+	}
 }
