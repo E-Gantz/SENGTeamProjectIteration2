@@ -16,6 +16,7 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	private ProductCart pcart;
 	private BarcodeScanner scanner;
 	private Boolean NotInBags;
+	private Timer timer;
 	
 	public ItemPlacer(BarcodeScanner scanner, ProductCart pcart) {
 		this.scanner = scanner;
@@ -23,6 +24,7 @@ public class ItemPlacer implements ElectronicScaleObserver {
 		this.previousWeight = 0.0;
 		this.currentWeight = 0.0;
 		this.NotInBags = false;
+		this.timer = new Timer();
 	}
 	
 
@@ -45,8 +47,9 @@ public class ItemPlacer implements ElectronicScaleObserver {
 		currentWeight = weightInGrams;
 		if(currentWeight == previousWeight + expectedWeight) {
 			this.previousWeight = currentWeight;
-			expectedWeight = 0.0;
+			this.expectedWeight = 0.0;
 			this.scanner.enable();
+			this.NotInBags = false;
 		}
 		else {
 			throw new SimulationException("Wrong item placed on scale!");
@@ -66,7 +69,6 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	}
 	
 	public void startTimer() {
-		Timer timer = new Timer();
 		BaggingTimeout timeout = new BaggingTimeout(pcart, this);
 		timer.schedule(timeout,50, 500); //this should run the BaggingTimeout run() method every .5 seconds.
 	}

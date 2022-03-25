@@ -21,8 +21,8 @@ public class ProductCart {
 	
 	public void addToCart(BarcodedProduct prod) {
 		cart.add(prod);
-		String nameAndPrice = "$" + prod.getDescription() + " " + prod.getPrice().toPlainString();
-		items.add(nameAndPrice); // string added should look like "Milk 10" or something.
+		String nameAndPrice = prod.getDescription() + " " + "$" + prod.getPrice().toPlainString();
+		items.add(nameAndPrice); // string added should look like "Milk $10" or something.
 		totalPrice = totalPrice.add(prod.getPrice());
 		totalExpectedWeight += prod.getExpectedWeight();
 	}

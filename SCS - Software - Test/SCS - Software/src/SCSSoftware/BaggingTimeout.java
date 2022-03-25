@@ -2,8 +2,6 @@ package SCSSoftware;
 
 import java.util.TimerTask;
 
-import org.lsmr.selfcheckout.devices.SimulationException;
-
 public class BaggingTimeout extends TimerTask{
 	private ProductCart cart;
 	private ItemPlacer placer;
@@ -22,13 +20,14 @@ public class BaggingTimeout extends TimerTask{
 		if (counter == 10) {
 			//System.out.println("it has been 5 seconds");
 			counter = 0;
-			cancel();
+			this.cancel();
 			placer.BagTimeout();
-			throw new SimulationException("Please place your item on the scale");
+			//should trigger some kind of 'please place your item in the bagging area' ui message, just sets a flag in placer for now.
+			//throw new SimulationException("Please place your item on the scale");
 		}
 		else if (cart.getTotalExpectedWeight() == placer.getBagWeight()) {
 			counter = 0;
-			cancel();
+			this.cancel();
 		}
 		
 	}
