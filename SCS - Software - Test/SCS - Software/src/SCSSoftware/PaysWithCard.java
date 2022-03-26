@@ -3,8 +3,6 @@ package SCSSoftware;
 import java.math.BigDecimal;
 import java.util.Observer;
 
-import javax.smartcardio.Card;
-
 import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Card.CardData;
 import org.lsmr.selfcheckout.devices.CardReader;
@@ -16,6 +14,9 @@ public class PaysWithCard implements CardReaderObserver {
 	private string getnumber;
 	private string getcardholder;
 	private string getcvv; 
+	BankSimulator bank;
+
+	public BigDecimal temp;
 
 	private string getTapEnabled;
 	private string getchip;
@@ -49,49 +50,18 @@ public class PaysWithCard implements CardReaderObserver {
 		getnumber = data.getNumber();
 	}
 
-	public PaysWithCard(CardReader cardreader, Card card)
-	{
-		cardreader.attach(this);
-		try{
-			if (type == CREDIT)
-			{
-				paysWithCredit();
-			}
-		} catch(Exception e) {
-		}
+	public PaysWithCard(CardReader cardreader, Card card, BankSimulator bank)
+	{	
+		this.bank = bank;
+		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, temp);
+		boolean response = bank.transactionCanHappen();
 
-		try{
-			if (type == DEBIT)
-			{
-				paysWithDebit();
-			}
-		} catch(Exception e) {
-		}
-	}
+		if(response == true)
+		{
 
-	// public void paysWithCredit(Card card) 
-	// {
-	// 	Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
-	// 	Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
-	// }
+		} 
 
-	// public void paysWithCredit(Card card) 
-	// {
-	// 	card(type, number, cardholder, getcvv, true, false); // TAP
-	// 	card(type, number, cardholder, getcvv, false, true); // CHIP
-	// }
 
-	public BigDecimal success()
-	{
-		payment = current_total;
-		return payment;
 	}
 
 }
-
-/* DO NOT DELETE: 
-RNG Transaction ID
-RNG card approved/declined for testing
-make another class for card approval
-CPSC 329 shit salting
-*/
