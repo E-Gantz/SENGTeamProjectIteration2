@@ -3,7 +3,6 @@ package SCSSoftware;
 import java.math.BigDecimal;
 
 import org.lsmr.selfcheckout.Banknote;
-import org.lsmr.selfcheckout.Card;
 import org.lsmr.selfcheckout.Card.CardData;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
@@ -16,15 +15,12 @@ public class PaysWithCard implements CardReaderObserver {
 	private String getnumber;
 	private String getcardholder;
 	private String getcvv; 
+	BankSimulator bank;
 
-	private String getTapEnabled;
-	private String getchip;
+	private BigDecimal transactionAmount;
 
 	private CardReader cardReader;
-	private Card pcard;
-	
-	public BigDecimal current_total;
-	public BigDecimal payment;
+	private HashMap<String,HashMap<String,String>>paymentResult; 
 
 	public void cardInserted(CardReader reader) {
 		// IGNORE
@@ -49,43 +45,37 @@ public class PaysWithCard implements CardReaderObserver {
 		getnumber = data.getNumber();
 	}
 
-	public PaysWithCard(CardReader cardreader, Card card)
-	{
-		cardreader.attach(this);
-		/*try{
-			if (type == CREDIT)
-			{
-				paysWithCredit();
-			}
-		} catch(Exception e) {
-		}
+	public PaysWithCard(CardReader cardreader, BankSimulator bank, BigDecimal amount)
+	{	
+		//Remember to get transaction amount somewhere
+		this.bank = bank;
+		this.transactionAmount= amount;
+		this.cardReader = cardreader; 
 
-		try{
-			if (type == DEBIT)
-			{
-				paysWithDebit();
-			}
-		} catch(Exception e) {
-		}*/		//commenting out for now because of compile errors
-		
+		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
+		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
+
+		if(response != "NULL")
+		{
+			paymentResult = new HashMap<String,HashMap<String,String>>();
+			HashMap<String, String> data = new HashMap<String, String>();  
+			data.put("cardType", gettype); 
+			data.put("amountPaid", transactionAmount.toString());
+			paymentResult.put(response,data);  
+			
+		} else {
+			
+		}
 	}
 
-	// public void paysWithCredit(Card card) 
-	// {
-	// 	Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
-	// 	Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
-	// }
-
-	// public void paysWithCredit(Card card) 
-	// {
-	// 	card(type, number, cardholder, getcvv, true, false); // TAP
-	// 	card(type, number, cardholder, getcvv, false, true); // CHIP
-	// }
-
-	public BigDecimal success()
+	private String receiptCardNum()
 	{
-		payment = current_total;
-		return payment;
+		String[] stringParts = getnumber.split(""); 
+		String returnString = stringParts[0] + stringParts[1] + stringParts[2] + stringParts[3]; 
+		int numOfStars = getnumber.length() - returnString.length(); 
+		for (int j = 0; j < numOfStars; j++)
+			returnString += "X"; 
+		return returnString; 
 	}
 
 	@Override
@@ -99,4 +89,7 @@ public class PaysWithCard implements CardReaderObserver {
 		// TODO Auto-generated method stub
 		
 	}
+
+	// cannot be used unless checkout is true
+
 }

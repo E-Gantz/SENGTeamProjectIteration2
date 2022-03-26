@@ -1,5 +1,7 @@
 package SCSSoftware;
 
+import java.math.BigDecimal;
+
 import org.lsmr.selfcheckout.devices.BarcodeScanner;
 import org.lsmr.selfcheckout.devices.SimulationException;
 
@@ -8,6 +10,7 @@ public class Checkout {
 	boolean state;
 	ProductCart pcart;
 	BarcodeScanner scanner;
+	private BigDecimal amountpaid;
 	
 	public Checkout(BarcodeScanner scanner, ProductCart pcart) {
 		this.scanner = scanner;
@@ -45,5 +48,19 @@ public class Checkout {
 	public boolean getState() {
 		return this.state;
 	}
+	
+	public BigDecimal getTotalPrice() {
+		return this.pcart.getTotalPrice();
+	}
+	
+	public void setAmountPaid(BigDecimal amount) {
+		this.amountpaid = amount;
+	}
+	
+	public BigDecimal getAmountPaid() {
+		return this.amountpaid;
+	}
+	
+	
 	
 }
