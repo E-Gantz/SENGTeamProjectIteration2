@@ -10,19 +10,20 @@ import org.lsmr.selfcheckout.devices.observers.CardReaderObserver;
 
 public class PaysWithCard implements CardReaderObserver {
 
-	private string gettype;
-	private string getnumber;
-	private string getcardholder;
-	private string getcvv; 
+	private String gettype;
+	private String getnumber;
+	private String getcardholder;
+	private String getcvv; 
 	BankSimulator bank;
 
-	public BigDecimal temp;
+	private BigDecimal transactionAmount;
 
-	private string getTapEnabled;
-	private string getchip;
+	private String getTapEnabled;
+	private String getchip;
 
 	private CardReader cardReader;
 	private Card pcard;
+	private HashMap<String,HashMap<String,String>>paymentResult; 
 	
 	public BigDecimal current_total;
 	public BigDecimal payment;
@@ -50,18 +51,36 @@ public class PaysWithCard implements CardReaderObserver {
 		getnumber = data.getNumber();
 	}
 
-	public PaysWithCard(CardReader cardreader, Card card, BankSimulator bank)
+	public PaysWithCard(CardReader cardreader, Card card, BankSimulator bank, BigDecimal amount)
 	{	
 		this.bank = bank;
-		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, temp);
-		boolean response = bank.transactionCanHappen();
+		this.transactionAmount= amount; 
+		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
+		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
 
-		if(response == true)
+		if(response != "NULL")
 		{
-
-		} 
-
-
+			paymentResult= new HashMap<String,HashMap<String,String>>();
+			HashMap<String, String> data = new HashMap<String, String>();  
+			data.put("cardType", gettype); 
+			data.put("amountPaid", transactionAmount.toString());
+			paymentResult.put(response,data);  
+			
+		} else {
+			
+		}
+		
 	}
+
+	private String receiptCardNum()
+	{
+		String[] stringParts = getnumber.split(""); 
+		String returnString = stringParts[0] + stringParts[1] + stringParts[2] + stringParts[3]; 
+		int numOfStars = getnumber.length() - returnString.length(); 
+		for (int j = 0; j < numOfStars; j++)
+			returnString += "X"; 
+		return returnString; 
+	}
+
 
 }

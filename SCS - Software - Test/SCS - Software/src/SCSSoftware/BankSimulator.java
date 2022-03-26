@@ -1,6 +1,7 @@
 package SCSSoftware;
+import java.math.BigDecimal;
 import java.util.HashMap;
-
+import java.util.UUID;
 
 public class BankSimulator {
 
@@ -10,11 +11,11 @@ public class BankSimulator {
 	{
 		HashMap<String,HashMap<String,String>> db = new HashMap<String,HashMap<String,String>>();
 	}
-
-	public Boolean transactionCanHappen(String customer, String number, String CVV, String cardtype, BigDecimal txnAmount)
+	
+	public String transactionCanHappen(String customer, String number, String CVV, String cardtype, BigDecimal txnAmount)
 	{		
 		BigDecimal chargedValue = new BigDecimal(txnAmount);
-		float intNumber = chargedValue.intValue();
+		double chargedAmount = chargedValue.doubleValue();
 
 		if(db.containsKey(customer) && db.get(customer).containsKey("cardNumber")
 									&& db.get(customer).containsKey("CVV")
@@ -24,12 +25,13 @@ public class BankSimulator {
 				 db.get("CVV") == CVV &&
 				 db.get("cardType") == cardtype
 				){
-					int currentBalance = getBalance(customer);
-					if (currentBalance >= txnAmount)
+					double currentBalance = getBalance(customer);
+					if (currentBalance >= chargedAmount)
 					{
-						currentBalance -= txnAmount;
+						currentBalance -= chargedAmount;
 						updateBalance(currentBalance, customer);
-						return true; 
+						UUID txId = UUID.randomUUID();
+						return txId.toString(); 
 					}
 					else 
 					{
@@ -37,12 +39,12 @@ public class BankSimulator {
 					}	
 				}
 		} 
-		return false; 
+		return "NULL"; // unsuccessful / declined 
 	}
 
-	public int getBalance(String customer)
+	public double getBalance(String customer)
 	{
-		int number;
+		double number;
 		String currentBalance = db.get(customer).get("balance"); 
         try{
             number = Integer.parseInt(currentBalance);
@@ -61,8 +63,6 @@ public class BankSimulator {
 	// just for testing 
 	public void addToDatabase(String customer, String number, String CVV, String cardtype, BigDecimal balance)
 	{
-		if (balance < 0)
-			balance = 0; 
 			
 		HashMap<String,String> data = new HashMap<String,String>(); 
 		data.put("cardNumber", number); 
