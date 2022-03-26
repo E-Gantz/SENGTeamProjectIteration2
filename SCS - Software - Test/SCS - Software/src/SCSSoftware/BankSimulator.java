@@ -48,14 +48,15 @@ public class BankSimulator {
 		String currentBalance = db.get(customer).get("balance"); 
         try{
             number = Integer.parseInt(currentBalance);
+            return number;
         }
         catch (NumberFormatException ex){
             ex.printStackTrace();
         }
-		return number;
+		
 	}
 
-	public string updateBalance(int remainingBalance, String customer)
+	public void updateBalance(int remainingBalance, String customer)
 	{
 		db.get(customer).replace("balance",remainingBalance);
 	}

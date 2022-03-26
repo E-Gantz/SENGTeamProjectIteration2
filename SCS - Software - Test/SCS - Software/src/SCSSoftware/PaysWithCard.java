@@ -1,10 +1,13 @@
 package SCSSoftware;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
-import org.lsmr.selfcheckout.Banknote;
+//import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Card.CardData;
+import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
+import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.CardReaderObserver;
 
 public class PaysWithCard implements CardReaderObserver {
@@ -17,7 +20,7 @@ public class PaysWithCard implements CardReaderObserver {
 
 	private BigDecimal transactionAmount;
 
-	private CardReader cardReader;
+//	private CardReader cardReader;
 	private HashMap<String,HashMap<String,String>>paymentResult; 
 
 	public void cardInserted(CardReader reader) {
@@ -48,10 +51,10 @@ public class PaysWithCard implements CardReaderObserver {
 		//Remember to get transaction amount somewhere
 		this.bank = bank;
 		this.transactionAmount= amount;
-		this.cardReader = cardreader; 
+//		this.cardReader = cardreader; 
 
-		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
-		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
+		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
+//		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
 
 		if(response != "NULL")
 		{
@@ -66,7 +69,7 @@ public class PaysWithCard implements CardReaderObserver {
 		}
 	}
 
-	private String receiptCardNum()
+	public String receiptCardNum()
 	{
 		String[] stringParts = getnumber.split(""); 
 		String returnString = stringParts[0] + stringParts[1] + stringParts[2] + stringParts[3]; 
@@ -74,6 +77,18 @@ public class PaysWithCard implements CardReaderObserver {
 		for (int j = 0; j < numOfStars; j++)
 			returnString += "X"; 
 		return returnString; 
+	}
+
+	@Override
+	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	// cannot be used unless checkout is true
