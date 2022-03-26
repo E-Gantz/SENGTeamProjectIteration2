@@ -9,21 +9,21 @@ public class BankSimulator {
 
 	public BankSimulator()
 	{
-		HashMap<String,HashMap<String,String>> db = new HashMap<String,HashMap<String,String>>();
+		db = new HashMap<String,HashMap<String,String>>();
 	}
 	
 	public String transactionCanHappen(String customer, String number, String CVV, String cardtype, BigDecimal txnAmount)
 	{		
-		BigDecimal chargedValue = new BigDecimal(txnAmount);
-		double chargedAmount = chargedValue.doubleValue();
+		double chargedAmount = txnAmount.doubleValue();
 
 		if(db.containsKey(customer) && db.get(customer).containsKey("cardNumber")
 									&& db.get(customer).containsKey("CVV")
 									&& db.get(customer).containsKey("cardtype")
 		){
-			if ( db.get("cardNumber") == number &&
-				 db.get("CVV") == CVV &&
-				 db.get("cardType") == cardtype
+			
+			if ( db.get(customer).get("cardNumber") == number 
+			     && db.get(customer).get("CVV") == CVV 
+				 && db.get(customer).get("cardType") == cardtype
 				){
 					double currentBalance = getBalance(customer);
 					if (currentBalance >= chargedAmount)
@@ -44,21 +44,15 @@ public class BankSimulator {
 
 	public double getBalance(String customer)
 	{
-		double number;
+
 		String currentBalance = db.get(customer).get("balance"); 
-        try{
-            number = Integer.parseInt(currentBalance);
-            return number;
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
-        }
-		
+		return Double.parseDouble(currentBalance);
+
 	}
 
-	public void updateBalance(int remainingBalance, String customer)
+	public void updateBalance(double remainingBalance, String customer)
 	{
-		db.get(customer).replace("balance",remainingBalance);
+		db.get(customer).replace("balance",Double.toString(remainingBalance));
 	}
 
 	// just for testing 
