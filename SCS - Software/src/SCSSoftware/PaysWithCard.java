@@ -16,7 +16,8 @@ public class PaysWithCard implements CardReaderObserver {
 	private String getnumber;
 	private String getcardholder;
 	private String getcvv; 
-	BankSimulator bank;
+	private Checkout checkout;
+	private BankSimulator bank;
 
 	private BigDecimal transactionAmount;
 
@@ -40,17 +41,26 @@ public class PaysWithCard implements CardReaderObserver {
 	}
 
 	public void cardDataRead(CardReader reader, CardData data) {
-		getcardholder = data.getCardholder();
-		gettype = data.getType();
-		getcvv = data.getCVV();
-		getnumber = data.getNumber();
+		
+		if(this.checkout.getState()) {
+			
+			getcardholder = data.getCardholder();
+			gettype = data.getType();
+			getcvv = data.getCVV();
+			getnumber = data.getNumber();
+			makePayment();
+		}
+		
 	}
 
-	public PaysWithCard(CardReader cardreader, BankSimulator bank, BigDecimal amount)
+	public PaysWithCard(BankSimulator bank, Checkout checkout)
 	{	
 		//Remember to get transaction amount somewhere
 		this.bank = bank;
-		this.transactionAmount= amount; 
+		this.checkout = checkout;
+		this.transactionAmount= this.checkout.getTotalPrice();
+		
+		
 
 		
 	}
@@ -72,7 +82,7 @@ public class PaysWithCard implements CardReaderObserver {
 			paymentResult.put(response,data);  
 			
 		} else {
-			
+			// froze, card decline 
 		}
 	}
 
