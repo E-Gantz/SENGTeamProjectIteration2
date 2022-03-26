@@ -1,8 +1,9 @@
 package SCSSoftware;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
-import org.lsmr.selfcheckout.Banknote;
+//import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Card.CardData;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
@@ -19,7 +20,7 @@ public class PaysWithCard implements CardReaderObserver {
 
 	private BigDecimal transactionAmount;
 
-	private CardReader cardReader;
+
 	private HashMap<String,HashMap<String,String>>paymentResult; 
 
 	public void cardInserted(CardReader reader) {
@@ -49,11 +50,18 @@ public class PaysWithCard implements CardReaderObserver {
 	{	
 		//Remember to get transaction amount somewhere
 		this.bank = bank;
-		this.transactionAmount= amount;
-		this.cardReader = cardreader; 
+		this.transactionAmount= amount; 
 
-		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
-		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
+		
+	}
+	
+	public void makePayment() {
+		/*
+		 * response is the UUID of the transaction 
+		 * (like if we were making a request to an api)
+		 * */
+		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
+		
 
 		if(response != "NULL")
 		{
@@ -68,7 +76,7 @@ public class PaysWithCard implements CardReaderObserver {
 		}
 	}
 
-	private String receiptCardNum()
+	public String receiptCardNum()
 	{
 		String[] stringParts = getnumber.split(""); 
 		String returnString = stringParts[0] + stringParts[1] + stringParts[2] + stringParts[3]; 
