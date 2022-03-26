@@ -20,7 +20,7 @@ public class PaysWithCard implements CardReaderObserver {
 
 	private BigDecimal transactionAmount;
 
-//	private CardReader cardReader;
+
 	private HashMap<String,HashMap<String,String>>paymentResult; 
 
 	public void cardInserted(CardReader reader) {
@@ -50,11 +50,18 @@ public class PaysWithCard implements CardReaderObserver {
 	{	
 		//Remember to get transaction amount somewhere
 		this.bank = bank;
-		this.transactionAmount= amount;
-//		this.cardReader = cardreader; 
+		this.transactionAmount= amount; 
 
+		
+	}
+	
+	public void makePayment() {
+		/*
+		 * response is the UUID of the transaction 
+		 * (like if we were making a request to an api)
+		 * */
 		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
-//		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
+		
 
 		if(response != "NULL")
 		{
