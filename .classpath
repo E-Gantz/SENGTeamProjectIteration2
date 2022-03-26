@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="SCS - Software - Test/SCS - Software/SCS - Hardware - v2.0/src"/>
+	<classpathentry kind="src" path="SCS - Software - Test/SCS - Software/src"/>
+	<classpathentry kind="src" path="SCS - Software - Test/src"/>
+	<classpathentry kind="src" path="SCS - Software/SCS - Hardware - v2.0/src"/>
+	<classpathentry kind="src" path="SCS - Software/src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
