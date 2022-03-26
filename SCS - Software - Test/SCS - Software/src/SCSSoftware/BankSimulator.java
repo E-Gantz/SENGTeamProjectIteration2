@@ -68,7 +68,7 @@ public class BankSimulator {
 		data.put("cardNumber", number); 
 		data.put("CVV", CVV);  
 		data.put("cardType",cardtype);
-		data.put("balance",balamtoString()); 
+		data.put("balance",balance.toString()); 
 		db.put(customer, data); 
 	}
 

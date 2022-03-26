@@ -18,15 +18,8 @@ public class PaysWithCard implements CardReaderObserver {
 
 	private BigDecimal transactionAmount;
 
-	private String getTapEnabled;
-	private String getchip;
-
 	private CardReader cardReader;
-	private Card pcard;
 	private HashMap<String,HashMap<String,String>>paymentResult; 
-	
-	public BigDecimal current_total;
-	public BigDecimal payment;
 
 	public void cardInserted(CardReader reader) {
 		// IGNORE
@@ -51,10 +44,13 @@ public class PaysWithCard implements CardReaderObserver {
 		getnumber = data.getNumber();
 	}
 
-	public PaysWithCard(CardReader cardreader, Card card, BankSimulator bank, BigDecimal amount)
+	public PaysWithCard(CardReader cardreader, BankSimulator bank, BigDecimal amount)
 	{	
+		//Remember to get transaction amount somewhere
 		this.bank = bank;
-		this.transactionAmount= amount; 
+		this.transactionAmount= amount;
+		this.cardReader = cardreader; 
+
 		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
 		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
 
@@ -69,7 +65,6 @@ public class PaysWithCard implements CardReaderObserver {
 		} else {
 			
 		}
-		
 	}
 
 	private String receiptCardNum()
