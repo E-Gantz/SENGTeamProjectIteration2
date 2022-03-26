@@ -1,7 +1,6 @@
 package SCSSoftware;
 
 import java.math.BigDecimal;
-import java.util.Observer;
 
 import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Card.CardData;
@@ -56,7 +55,7 @@ public class PaysWithCard implements CardReaderObserver {
 
 		if(response != "NULL")
 		{
-			paymentResult= new HashMap<String,HashMap<String,String>>();
+			paymentResult = new HashMap<String,HashMap<String,String>>();
 			HashMap<String, String> data = new HashMap<String, String>();  
 			data.put("cardType", gettype); 
 			data.put("amountPaid", transactionAmount.toString());
@@ -77,5 +76,6 @@ public class PaysWithCard implements CardReaderObserver {
 		return returnString; 
 	}
 
+	// cannot be used unless checkout is true
 
 }
