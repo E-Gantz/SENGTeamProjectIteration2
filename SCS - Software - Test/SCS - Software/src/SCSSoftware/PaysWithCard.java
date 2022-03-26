@@ -67,14 +67,13 @@ public class PaysWithCard implements CardReaderObserver {
 			}
 		} catch(Exception e) {
 		}
-		
 	}
 
-	public void paysWithCredit(Card card) 
-	{
-		Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
-		Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
-	}
+	// public void paysWithCredit(Card card) 
+	// {
+	// 	Card tap = card(type, number, cardholder, getcvv, true, false); // TAP	
+	// 	Card chip = card(type, number, cardholder, getcvv, false, true); // CHIP
+	// }
 
 	// public void paysWithCredit(Card card) 
 	// {
@@ -89,3 +88,10 @@ public class PaysWithCard implements CardReaderObserver {
 	}
 
 }
+
+/* DO NOT DELETE: 
+RNG Transaction ID
+RNG card approved/declined for testing
+make another class for card approval
+CPSC 329 shit salting
+*/
