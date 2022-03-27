@@ -1,15 +1,11 @@
 package SCSSoftware;
 
 import java.math.BigDecimal;
- peterx2
 import java.util.HashMap;
 
 //import org.lsmr.selfcheckout.Banknote;
-
-
-import org.lsmr.selfcheckout.Banknote;
-main
 import org.lsmr.selfcheckout.Card.CardData;
+import org.lsmr.selfcheckout.Card.CardSwipeData;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
@@ -21,15 +17,13 @@ public class PaysWithCard implements CardReaderObserver {
 	private String getnumber;
 	private String getcardholder;
 	private String getcvv; 
-	BankSimulator bank;
+	private Checkout checkout;
+	private BankSimulator bank;
+	private boolean cvvrequired;
 
 	private BigDecimal transactionAmount;
 
-peterx2
 
-
-	private CardReader cardReader;
-main
 	private HashMap<String,HashMap<String,String>>paymentResult; 
 
 	public void cardInserted(CardReader reader) {
@@ -49,36 +43,54 @@ main
 	}
 
 	public void cardDataRead(CardReader reader, CardData data) {
-		getcardholder = data.getCardholder();
-		gettype = data.getType();
-		getcvv = data.getCVV();
-		getnumber = data.getNumber();
-	}
-
-	public PaysWithCard(CardReader cardreader, BankSimulator bank, BigDecimal amount)
-	{	
-		//Remember to get transaction amount somewhere
-		this.bank = bank;
-peterx2
-		this.transactionAmount= amount; 
-
+		
+		
+		if(this.checkout.getState()) {
+			
+			getcardholder = data.getCardholder();
+			gettype = data.getType();
+			
+			if (data instanceof CardSwipeData)
+			{
+				getcvv = "";
+				cvvrequired = false;
+			} else {
+				getcvv = data.getCVV();
+				cvvrequired = true;
+			}
+				
+			getnumber = data.getNumber();
+			try {
+				makePayment();
+			} catch (BankDeclinedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
-	public void makePayment() {
+	public HashMap<String,HashMap<String,String>> getPaymentResult()
+	{
+		return paymentResult;
+	}
+	
+	public PaysWithCard(BankSimulator bank, Checkout checkout)
+	{	
+		//Remember to get transaction amount somewhere
+		this.bank = bank;
+		this.checkout = checkout;
+		this.transactionAmount= this.checkout.getTotalPrice();
+
+	}
+	
+	public void makePayment() throws BankDeclinedException {
 		/*
 		 * response is the UUID of the transaction 
 		 * (like if we were making a request to an api)
 		 * */
-		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
-		
+		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount, cvvrequired);
 
-		this.transactionAmount= amount;
-		this.cardReader = cardreader; 
-
-		bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount);
-		String response = bank.transactionCanHappen(); // reponse is the UUID of the transaction 
-main
 
 		if(response != "NULL")
 		{
@@ -89,15 +101,11 @@ main
 			paymentResult.put(response,data);  
 			
 		} else {
-			
+			  throw new BankDeclinedException("Card Declined");
 		}
 	}
 
-peterx2
 	public String receiptCardNum()
-
-	private String receiptCardNum()
- main
 	{
 		String[] stringParts = getnumber.split(""); 
 		String returnString = stringParts[0] + stringParts[1] + stringParts[2] + stringParts[3]; 
@@ -121,8 +129,4 @@ peterx2
 
 	// cannot be used unless checkout is true
 
-peterx2
 }
-
-}
-main

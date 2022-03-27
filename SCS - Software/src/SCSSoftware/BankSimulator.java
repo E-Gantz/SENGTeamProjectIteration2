@@ -12,32 +12,50 @@ public class BankSimulator {
 		db = new HashMap<String,HashMap<String,String>>();
 	}
 	
-	public String transactionCanHappen(String customer, String number, String CVV, String cardtype, BigDecimal txnAmount)
-	{		
-		double chargedAmount = txnAmount.doubleValue();
+	private Boolean verifyCardData(String customer, String number, String cardtype) {
 
-		if(db.containsKey(customer) && db.get(customer).containsKey("cardNumber")
-									&& db.get(customer).containsKey("CVV")
-									&& db.get(customer).containsKey("cardtype")
+		return db.get(customer).get("cardNumber") == number 
+				 && db.get(customer).get("cardtype") == cardtype;
+		
+	}
+	
+	private Boolean verifyCVV(String customer, String cvv) {
+		return db.get(customer).get("CVV") == cvv;
+	}
+	
+	private String verifyCustomerTransaction(String customer, BigDecimal txnAmount) {
+		double chargedAmount = txnAmount.doubleValue();
+		double currentBalance = getBalance(customer);
+		if (currentBalance >= chargedAmount)
+		{
+			currentBalance -= chargedAmount;
+			updateBalance(currentBalance, customer);
+			UUID txId = UUID.randomUUID();
+			return txId.toString(); 
+		}
+		else 
+		{
+			System.out.println("Declined");
+			return "NULL";
+		}	
+		
+	}
+	
+	public String transactionCanHappen(String customer, String number, String CVV, String cardtype, BigDecimal txnAmount,
+			Boolean cvvrequired)
+	{		
+
+		if (db.containsKey(customer) 
 		){
 			
-			if ( db.get(customer).get("cardNumber") == number 
-			     && db.get(customer).get("CVV") == CVV 
-				 && db.get(customer).get("cardType") == cardtype
-				){
-					double currentBalance = getBalance(customer);
-					if (currentBalance >= chargedAmount)
-					{
-						currentBalance -= chargedAmount;
-						updateBalance(currentBalance, customer);
-						UUID txId = UUID.randomUUID();
-						return txId.toString(); 
-					}
-					else 
-					{
-						System.out.println("Declined");
-					}	
-				}
+			if (cvvrequired){
+				if (verifyCardData(customer,number,cardtype) && verifyCVV(customer,CVV))
+					return verifyCustomerTransaction(customer,txnAmount);
+				
+			}else{
+				if (verifyCardData(customer,number,cardtype))
+					return verifyCustomerTransaction(customer,txnAmount);
+			}
 		} 
 		return "NULL"; // unsuccessful / declined 
 	}
@@ -58,11 +76,10 @@ public class BankSimulator {
 	// just for testing 
 	public void addToDatabase(String customer, String number, String CVV, String cardtype, BigDecimal balance)
 	{
-			
 		HashMap<String,String> data = new HashMap<String,String>(); 
 		data.put("cardNumber", number); 
 		data.put("CVV", CVV);  
-		data.put("cardType",cardtype);
+		data.put("cardtype",cardtype);
 		data.put("balance",balance.toString()); 
 		db.put(customer, data); 
 	}
