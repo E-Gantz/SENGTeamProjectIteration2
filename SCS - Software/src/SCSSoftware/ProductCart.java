@@ -10,6 +10,7 @@ public class ProductCart {
 	private ArrayList<BarcodedProduct> cart;
 	private ArrayList<String> items;
 	private BigDecimal totalPrice;
+	private CustomerOwnBag ownbag;
 	private double totalExpectedWeight;
 	
 	public ProductCart() {
@@ -46,6 +47,10 @@ public class ProductCart {
 	}
 	
 	public double getTotalExpectedWeight() {
-		return this.totalExpectedWeight;
+		if(ownbag.getBagWeight() > 0) {
+			return this.totalExpectedWeight - ownbag.getBagWeight();
+		} else {
+			return this.totalExpectedWeight;
+		}
 	}
 }
