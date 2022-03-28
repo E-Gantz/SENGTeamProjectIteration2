@@ -32,10 +32,7 @@ public class BanknoteRunner {
 	private ArrayList<Banknote> banknoteCart;
 	
 	// BanknoteRunner is passed the checkout's total along with the station
-	public BanknoteRunner(BigDecimal checkoutTotal, SelfCheckoutStation station) {
-		this.noteSlot = station.banknoteInput;
-		this.noteStorage = station.banknoteStorage;
-		this.noteValidator = station.banknoteValidator;
+	public BanknoteRunner(BigDecimal checkoutTotal) {
 		
 		this.paidTotal = BigDecimal.ZERO;
 		this.checkoutTotal = checkoutTotal;
@@ -74,5 +71,10 @@ public class BanknoteRunner {
 	// Add the valid note to the banknote cart as well as the running total paid
 	public void addValidNote() {
 		paidTotal.add(BigDecimal.valueOf(validNote.getValue()));
+	}
+	
+	// Sum banknotes in the array
+	public BigDecimal sumBanknotes() {
+		return this.getPaidTotal();
 	}
 }
