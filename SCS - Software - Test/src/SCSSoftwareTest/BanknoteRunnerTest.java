@@ -50,12 +50,17 @@ public class BanknoteRunnerTest {
 		bStorage = new BanknoteStorageUnit(1000);
 		bValidator = new BanknoteValidator(currency, banknoteDenom);
 		
+		bSlot.endConfigurationPhase();
+		bStorage.endConfigurationPhase();
+		bValidator.endConfigurationPhase();
+		
 		banknoteRunner = new BanknoteRunner(checkout.getTotalPrice(), bSlot, bStorage, bValidator);
 	}
 
 	@Test
-	public void test() {
-		assertEquals(1, 1);
+	public void testGetCheckoutTotal() {
+		scanner.scan(item1);
+		assertEquals(banknoteRunner.getCheckoutTotal(), checkout.getTotalPrice());
 	}
 
 }

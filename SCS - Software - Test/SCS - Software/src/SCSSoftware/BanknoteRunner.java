@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Currency;
 
 import org.lsmr.selfcheckout.Banknote;
-import org.lsmr.selfcheckout.devices.BanknoteDispenser;
 import org.lsmr.selfcheckout.devices.BanknoteStorageUnit;
 import org.lsmr.selfcheckout.devices.BanknoteValidator;
-import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 
 public class BanknoteRunner {
 	
