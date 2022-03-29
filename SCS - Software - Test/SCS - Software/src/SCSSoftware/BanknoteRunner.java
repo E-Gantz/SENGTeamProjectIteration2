@@ -1,5 +1,7 @@
 package SCSSoftware;
-import softwareObservers.BanknoteObserver;
+import softwareObservers.BSlotObserver;
+import softwareObservers.BStorageObserver;
+import softwareObservers.BValidatorObserver;
 import org.lsmr.selfcheckout.devices.BanknoteSlot;
 
 import java.math.BigDecimal;
@@ -15,10 +17,11 @@ import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 public class BanknoteRunner {
 	
 	// Initialize the observer and define the hardware so we have access to them throughout the class
-	private BanknoteObserver banknoteObserver;
+	private BSlotObserver bSlotObserver;
+	private BStorageObserver bStorageObserver;
+	private BValidatorObserver bValidatorObserver;
 	
 	private BanknoteSlot noteSlot;
-	private BanknoteDispenser noteDispenser;
 	private BanknoteStorageUnit noteStorage;
 	private BanknoteValidator noteValidator;
 	private Banknote validNote;
@@ -32,22 +35,28 @@ public class BanknoteRunner {
 	private ArrayList<Banknote> banknoteCart;
 	
 	// BanknoteRunner is passed the checkout's total along with the station
-	public BanknoteRunner(BigDecimal checkoutTotal) {
+	public BanknoteRunner(BigDecimal checkoutTotal, BanknoteSlot bslot, BanknoteStorageUnit bStorage, BanknoteValidator bValidator) {
+		this.noteSlot = bslot;
+		this.noteStorage = bStorage;
+		this.noteValidator = bValidator;
 		
 		this.paidTotal = BigDecimal.ZERO;
 		this.checkoutTotal = checkoutTotal;
 		
 		this.banknoteCart = new ArrayList<Banknote>();
 		
-		this.banknoteObserver = new BanknoteObserver(this);
+		this.bSlotObserver = new BSlotObserver(this);
+		this.bStorageObserver = new BStorageObserver(this);
+		this.bValidatorObserver = new BValidatorObserver(this);
+		
 		this.attachObservers();
 	}
 	
 	// Attach the observers to the hardware
 	private void attachObservers() {
-		noteSlot.attach(banknoteObserver);
-		noteStorage.attach(banknoteObserver);
-		noteValidator.attach(banknoteObserver);
+		noteSlot.attach(bSlotObserver);
+		noteStorage.attach(bStorageObserver);
+		noteValidator.attach(bValidatorObserver);
 	}
 	
 	// Getters for the checkout total. paid total, and the banknote cart
