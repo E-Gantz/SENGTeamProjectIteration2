@@ -43,6 +43,7 @@ public class PaysWithCash {
 	{
 		if(totalValue.compareTo(BigDecimal.ZERO) >= 0)
 		{
+			// CoinStorageUnit load to CoinDispener then coindispenser.load and then coindispenser.emit()
 			
 		}
 	}
