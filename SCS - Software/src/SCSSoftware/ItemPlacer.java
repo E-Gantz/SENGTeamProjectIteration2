@@ -17,6 +17,7 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	private BarcodeScanner scanner;
 	private Boolean NotInBags;
 	private Timer timer;
+	private CustomerOwnBag ownbag;
 	
 	public ItemPlacer(BarcodeScanner scanner, ProductCart pcart) {
 		this.scanner = scanner;
@@ -43,8 +44,12 @@ public class ItemPlacer implements ElectronicScaleObserver {
 	//if weight is changed then something was placed on the scale, we expect it to be the item most recently added to the cart.
 	@Override
 	public void weightChanged(ElectronicScale scale, double weightInGrams) throws SimulationException{
+		beforePlacing();
 		expectedWeight = pcart.getCart().get((pcart.getCart().size())-1).getExpectedWeight();//this gets the weight of the item most recently added to the cart.
-		currentWeight = weightInGrams;
+		if(ownbag.checkOwnBag() == false)
+			currentWeight = weightInGrams;
+		else
+			currentWeight = weightInGrams  - ownbag.getBagWeight();
 		if(currentWeight == previousWeight + expectedWeight) {
 			this.previousWeight = currentWeight;
 			this.expectedWeight = 0.0;
@@ -73,10 +78,15 @@ public class ItemPlacer implements ElectronicScaleObserver {
 		timer.schedule(timeout,50, 500); //this should run the BaggingTimeout run() method every .5 seconds.
 	}
 	
+	public void beforePlacing() {
+		ItemPlacer itmp = new ItemPlacer(scanner, pcart);
+		this.ownbag = new CustomerOwnBag(1.0, itmp.getBagWeight());
+	}
+	
 	public double getBagWeight() {
 		return this.previousWeight;
 	}
-	
+		
 	public void BagTimeout() {
 		NotInBags = true;
 	}
