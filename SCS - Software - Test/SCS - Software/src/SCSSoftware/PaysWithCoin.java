@@ -45,7 +45,7 @@ public class PaysWithCoin implements CoinValidatorObserver{
 		
 	}
 	
-	public BigDecimal sumTotal(ArrayList<BigDecimal> list) {
+	public void sumTotal(ArrayList<BigDecimal> list) {
 		
 		BigDecimal total = new BigDecimal(0);
 		int i = 0;
@@ -55,9 +55,21 @@ public class PaysWithCoin implements CoinValidatorObserver{
 			i++;
 		}
 		
-		return total;
+		this.setTotalCoins(total);
 	}
+	
+	 public void setTotalCoins(BigDecimal total)
+     //setter method
+	 {
+		 this.total = total;
+	 }
 
+	 public BigDecimal getTotalCoins()
+	 {   
+		 return total;
+	 }
+
+	
 	@Override
 	public void validCoinDetected(CoinValidator validator, BigDecimal value) {
 		coinArray.add(value);

@@ -10,6 +10,7 @@ import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
+import SCSSoftware.CustomerOwnBag;
 import SCSSoftware.ItemAdder;
 import SCSSoftware.ItemPlacer;
 import SCSSoftware.ProductCart;
@@ -24,6 +25,7 @@ public class ItemPlacerTest {
 	public ItemAdder adder;
 	public ProductInventory inventory;
 	public ProductCart cart;
+	public CustomerOwnBag ownbag;
 	public Numeral[] code1 = new Numeral[] {Numeral.zero, Numeral.zero, Numeral.one};
 	public Numeral[] code2 = new Numeral[] {Numeral.zero, Numeral.zero, Numeral.two};
 	public Barcode bc1 = new Barcode(code1); //001
@@ -70,6 +72,7 @@ public class ItemPlacerTest {
 	public void testCheckAdd() throws OverloadException {
 		cart.addToCart(prod1);
 		scale.add(item1);
+		
 		assertEquals(24.99, placer.getBagWeight(), 0.1);
 	}
 	
