@@ -117,6 +117,11 @@ public class PaysWithCash {
 			banknotedispenser.load(notes);
 			coindispenser.load(coins);
 			
+			banknotedispenser.endConfigurationPhase();
+			coindispenser.endConfigurationPhase();
+			banknotedispenser.enable();
+			coindispenser.enable();
+			
 			while(true) {
 				try {
 					banknotedispenser.emit();
