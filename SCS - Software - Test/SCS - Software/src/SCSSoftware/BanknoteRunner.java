@@ -77,7 +77,7 @@ public class BanknoteRunner {
 	
 	// Add the valid note to the banknote cart as well as the running total paid
 	public void addValidNote() {
-		paidTotal.add(BigDecimal.valueOf(validNote.getValue()));
+		paidTotal = paidTotal.add(BigDecimal.valueOf(validNote.getValue()));
 	}
 	
 	// Sum banknotes in the array
