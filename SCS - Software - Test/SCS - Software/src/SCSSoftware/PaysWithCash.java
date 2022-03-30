@@ -4,13 +4,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Map;
 
 import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.devices.BanknoteDispenser;
+import org.lsmr.selfcheckout.devices.BanknoteSlot;
 import org.lsmr.selfcheckout.devices.BanknoteStorageUnit;
 import org.lsmr.selfcheckout.devices.CoinDispenser;
 import org.lsmr.selfcheckout.devices.CoinStorageUnit;
+import org.lsmr.selfcheckout.devices.CoinTray;
 import org.lsmr.selfcheckout.devices.DisabledException;
 import org.lsmr.selfcheckout.devices.EmptyException;
 import org.lsmr.selfcheckout.devices.OverloadException;
@@ -20,17 +23,19 @@ public class PaysWithCash {
 	
 	private PaysWithCoin payswithcoin;
 	private BanknoteRunner banknoterunner;
-	private BanknoteDispenser banknotedispenser;
+	private Map<Integer, BanknoteDispenser> banknotedispenser;
 	private BanknoteStorageUnit banknotestorage;
-	private CoinDispenser coindispenser;
+	private Map<BigDecimal, CoinDispenser> coindispenser;
 	private CoinStorageUnit coinstorage;
 	private BigDecimal chargedTotal;
 	private BigDecimal totalValue;
+	private BanknoteSlot banknoteOutputSlot;
+	private CoinTray coinTray;
 	
 	
-	
-	public PaysWithCash(PaysWithCoin payswithCoin, BanknoteRunner banknoteRunner, BanknoteDispenser banknoteDispenser, 
-			CoinDispenser coinDispenser, BanknoteStorageUnit banknoteStorage, CoinStorageUnit coinStorage)
+	public PaysWithCash(PaysWithCoin payswithCoin, BanknoteRunner banknoteRunner, Map<Integer, BanknoteDispenser> banknoteDispenser, 
+			Map<BigDecimal, CoinDispenser> coinDispenser, BanknoteStorageUnit banknoteStorage, CoinStorageUnit coinStorage,
+			BanknoteSlot banknoteOutputSlot, CoinTray coinTray)
 	{
 		this.payswithcoin = payswithCoin;
 		this.banknoterunner = banknoteRunner;
@@ -38,6 +43,8 @@ public class PaysWithCash {
 		this.banknotedispenser = banknoteDispenser;
 		this.banknotestorage = banknoteStorage;
 		this.coinstorage = coinStorage;
+		this.banknoteOutputSlot = banknoteOutputSlot;
+		this.coinTray = coinTray;
 	}
 	
 	public void sumCoinBanknote()
@@ -112,28 +119,84 @@ public class PaysWithCash {
 			}
 			Banknote[] notes = {};
 			Coin[] coins = {};
-			listOfNotes.toArray(notes);
-			listOfCoins.toArray(coins);
-			banknotedispenser.load(notes);
-			coindispenser.load(coins);
-			
-			banknotedispenser.endConfigurationPhase();
-			coindispenser.endConfigurationPhase();
-			banknotedispenser.enable();
-			coindispenser.enable();
-			
-			while(true) {
-				try {
-					banknotedispenser.emit();
-				} catch (EmptyException e) {
-					break;
+			for(Banknote note : listOfNotes) {
+				if(banknotedispenser.containsKey(note.getValue())) {
+					banknotedispenser.get(note.getValue()).load(note);
 				}
 			}
-			while(true) {
+			for(Coin coin : listOfCoins) {
+				if(coindispenser.containsKey(coin.getValue())) {
+					coindispenser.get(coin.getValue()).load(coin);
+				}
+			}
+			listOfNotes.toArray(notes);
+			listOfCoins.toArray(coins);
+			
+			int count = 0;
+			while(count < 5) {
 				try {
-					coindispenser.emit();
+					banknotedispenser.get(5).emit();
+					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 5));
 				} catch (EmptyException e) {
-					break;
+					count++;
+				}
+				try {
+					banknotedispenser.get(10).emit();
+					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 10));
+				} catch (EmptyException e) {
+					count++;
+				}
+				try {
+					banknotedispenser.get(20).emit();
+					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 20));
+				} catch (EmptyException e) {
+					count++;
+				}
+				try {
+					banknotedispenser.get(50).emit();
+					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 50));
+				} catch (EmptyException e) {
+					count++;
+				}
+				try {
+					banknotedispenser.get(100).emit();
+					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 100));
+				} catch (EmptyException e) {
+					count++;
+				}
+			}
+			
+			int count1 = 0;
+			while(count1 < 5) {
+				try {
+					coindispenser.get(BigDecimal.valueOf(0.05)).emit();
+					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.05)));
+				} catch (EmptyException e) {
+					count1++;
+				}
+				try {
+					coindispenser.get(BigDecimal.valueOf(0.10)).emit();
+					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.10)));
+				} catch (EmptyException e) {
+					count1++;
+				}
+				try {
+					coindispenser.get(BigDecimal.valueOf(0.25)).emit();
+					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.25)));
+				} catch (EmptyException e) {
+					count1++;
+				}
+				try {
+					coindispenser.get(BigDecimal.valueOf(1.00)).emit();
+					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(1.00)));
+				} catch (EmptyException e) {
+					count1++;
+				}
+				try {
+					coindispenser.get(BigDecimal.valueOf(2.00)).emit();
+					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(2.00)));
+				} catch (EmptyException e) {
+					count1++;
 				}
 			}
 		}
