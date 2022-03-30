@@ -86,7 +86,7 @@ public class BanknoteRunnerTest {
 	public void testGetPaidTotal() throws DisabledException, OverloadException {
 		Banknote note = new Banknote(Currency.getInstance("CAD"), 5);
 		bSlot.accept(note);
-		assert(banknoteRunner.getPaidTotal().equals(BigDecimal.valueOf(note.getValue())));
+		assert(banknoteRunner.getPaidTotal().compareTo(BigDecimal.valueOf(note.getValue())) == 0);
 	}
 
 }
