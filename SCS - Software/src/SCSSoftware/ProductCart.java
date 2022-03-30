@@ -32,6 +32,7 @@ public class ProductCart {
 		cart.remove(prod);
 		items.remove(prod.getDescription());
 		totalPrice = totalPrice.subtract(prod.getPrice());
+		totalExpectedWeight-=prod.getExpectedWeight();
 	}
 	
 	public BigDecimal getTotalPrice() {
