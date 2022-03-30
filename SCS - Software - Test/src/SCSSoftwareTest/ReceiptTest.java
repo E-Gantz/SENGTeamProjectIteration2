@@ -15,6 +15,7 @@ import SCSSoftware.ItemPlacer;
 import SCSSoftware.MemberCard;
 import SCSSoftware.Membership;
 import SCSSoftware.PrintReceipts;
+import SCSSoftware.PrinterMaintenance;
 import SCSSoftware.ProductCart;
 import SCSSoftware.ProductInventory;
 
@@ -42,13 +43,16 @@ public class ReceiptTest {
 	private MemberCard card1;
 	ReceiptPrinter printer;
 	PrintReceipts receiptPrintout;
+	PrinterMaintenance printmaint;
 	
 	@Before
 	public void setUp() {
 		printer = new ReceiptPrinter();
 		cart = new ProductCart();
-		printer.addInk(100);
-		printer.addPaper(100);
+		printmaint = new PrinterMaintenance();
+		printer.attach(printmaint);
+		printer.addInk(1);
+		printer.addPaper(1);
 		printer.endConfigurationPhase();
 		card1 = new MemberCard("00001", "jim bob");
 		members = new HashMap<String, MemberCard>();

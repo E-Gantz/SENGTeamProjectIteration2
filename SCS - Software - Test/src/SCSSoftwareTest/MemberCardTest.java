@@ -65,6 +65,20 @@ public class MemberCardTest {
 		assertTrue(card1 == membership.getMemberCard());
 	}
 	
+	@Test
+	public void memberPointsGained(){
+		membership.manualEntry("00001");
+		membership.getMemberCard().addPoints(100);
+		membership.getMemberCard().removePoints(10);
+		assertEquals(90, membership.getMemberCard().getPoints());
+	}
+	
+	@Test
+	public void cardNumCorrect(){
+		membership.manualEntry("00001");
+		assertEquals(membership.getMemberCard().getCardNumString(), "00001");
+	}
+	
 	@Test(expected = SimulationException.class)
 	public void wrongNumberEntered(){
 		membership.manualEntry("00002");

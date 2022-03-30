@@ -98,5 +98,18 @@ public class CheckoutTest {
 		checkout.disable();
 		assertTrue(!(checkout.getState()) && !(scanner.isDisabled()));
 	}
+	
+	@Test
+	public void amountPaidCorrect() {
+		checkout.setAmountPaid(new BigDecimal(5));
+		assertTrue(new BigDecimal(5).equals(checkout.getAmountPaid()));
+	}
+	
+	@Test
+	public void correctTotalPrice() {
+		pcart.addToCart(prod1);
+		checkout.enable();
+		assertTrue(new BigDecimal(5).equals(checkout.getTotalPrice()));
+	}
 
 }

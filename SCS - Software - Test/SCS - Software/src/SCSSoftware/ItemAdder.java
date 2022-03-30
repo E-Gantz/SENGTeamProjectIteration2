@@ -38,7 +38,6 @@ public class ItemAdder implements BarcodeScannerObserver{
 		cart.addToCart(scannedProduct);
 		barcodeScanner.disable();
 		placer.startTimer();
-		//start some kind of 5 second timer here for the item to be added to the bags
 	}
 
 }

@@ -105,5 +105,19 @@ public class ItemAdderTest {
 		}
 		assertTrue(scanner.isDisabled());
 	}
+	
+	@Test
+	public void itemRemoved() {
+		scanner.scan(item1);
+		//next two if statements simulate someone retrying to scan a couple times if the first scan doesn't work
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		if (cart.getItemNames().size() == cartSize) {
+			scanner.scan(item1);
+		}
+		cart.removeFromCart(prod1);
+		assertEquals(cart.getTotalExpectedWeight(), 0, 0.1);
+	}
 
 }
