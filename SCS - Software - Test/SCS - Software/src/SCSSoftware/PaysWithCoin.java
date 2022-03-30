@@ -16,16 +16,14 @@ public class PaysWithCoin implements CoinValidatorObserver{
 
 	private CoinSlot slot;
 	private CoinValidator validator;
-	private Coin coin;
 	private BigDecimal total;
 	
 	private ArrayList<BigDecimal> coinArray;
 	
-	public PaysWithCoin(CoinSlot slot, CoinValidator validator, Coin coin)
+	public PaysWithCoin(CoinSlot slot, CoinValidator validator)
 	{
 		this.slot = slot;
 		this.validator = validator;
-		this.coin = coin;
 		
 	}
 	
@@ -47,7 +45,7 @@ public class PaysWithCoin implements CoinValidatorObserver{
 	
 	public void sumTotal(ArrayList<BigDecimal> list) {
 		
-		BigDecimal total = new BigDecimal(0);
+		BigDecimal total = new BigDecimal(0.00);
 		int i = 0;
 		
 		while(i < list.size()) {
@@ -61,24 +59,40 @@ public class PaysWithCoin implements CoinValidatorObserver{
 	 public void setTotalCoins(BigDecimal total)
      //setter method
 	 {
-		 this.total = total;
+		 this.setTotal(total);
 	 }
 
 	 public BigDecimal getTotalCoins()
 	 {   
-		 return total;
+		 return getTotal();
 	 }
 
 	
 	@Override
 	public void validCoinDetected(CoinValidator validator, BigDecimal value) {
-		coinArray.add(value);
+		getCoinArray().add(value);
 	}
 
 	@Override
 	public void invalidCoinDetected(CoinValidator validator) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public ArrayList<BigDecimal> getCoinArray() {
+		return coinArray;
+	}
+
+	public void setCoinArray(ArrayList<BigDecimal> coinArray) {
+		this.coinArray = coinArray;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 }
