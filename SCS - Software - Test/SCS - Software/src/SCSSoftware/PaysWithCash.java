@@ -110,10 +110,10 @@ public class PaysWithCash {
 					}
 				}
 			}
-			Banknote[] notes;
-			Coin[] coins;
-			notes = (Banknote[]) listOfNotes.toArray();
-			coins = (Coin[]) listOfCoins.toArray();
+			Banknote[] notes = {};
+			Coin[] coins = {};
+			listOfNotes.toArray(notes);
+			listOfCoins.toArray(coins);
 			banknotedispenser.load(notes);
 			coindispenser.load(coins);
 			
