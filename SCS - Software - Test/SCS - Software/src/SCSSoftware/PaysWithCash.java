@@ -24,9 +24,7 @@ public class PaysWithCash {
 	private PaysWithCoin payswithcoin;
 	private BanknoteRunner banknoterunner;
 	private Map<Integer, BanknoteDispenser> banknotedispenser;
-	private BanknoteStorageUnit banknotestorage;
 	private Map<BigDecimal, CoinDispenser> coindispenser;
-	private CoinStorageUnit coinstorage;
 	private BigDecimal chargedTotal;
 	private BigDecimal totalValue;
 	private BanknoteSlot banknoteOutputSlot;
@@ -34,15 +32,12 @@ public class PaysWithCash {
 	
 	
 	public PaysWithCash(PaysWithCoin payswithCoin, BanknoteRunner banknoteRunner, Map<Integer, BanknoteDispenser> banknoteDispenser, 
-			Map<BigDecimal, CoinDispenser> coinDispenser, BanknoteStorageUnit banknoteStorage, CoinStorageUnit coinStorage,
-			BanknoteSlot banknoteOutputSlot, CoinTray coinTray)
+			Map<BigDecimal, CoinDispenser> coinDispenser, BanknoteSlot banknoteOutputSlot, CoinTray coinTray)
 	{
 		this.payswithcoin = payswithCoin;
 		this.banknoterunner = banknoteRunner;
 		this.coindispenser = coinDispenser;
 		this.banknotedispenser = banknoteDispenser;
-		this.banknotestorage = banknoteStorage;
-		this.coinstorage = coinStorage;
 		this.banknoteOutputSlot = banknoteOutputSlot;
 		this.coinTray = coinTray;
 	}
