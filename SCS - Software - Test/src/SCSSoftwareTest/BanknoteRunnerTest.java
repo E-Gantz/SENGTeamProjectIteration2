@@ -3,6 +3,7 @@ package SCSSoftwareTest;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Currency;
 
 import org.junit.Before;
@@ -86,9 +87,23 @@ public class BanknoteRunnerTest {
 	public void testGetPaidTotal() throws DisabledException, OverloadException {
 		Banknote note = new Banknote(Currency.getInstance("CAD"), 5);
 		bSlot.accept(note);
-		System.out.println(banknoteRunner.getPaidTotal());
-		System.out.println(note.getValue());
-		assert(banknoteRunner.getPaidTotal().compareTo(BigDecimal.valueOf(note.getValue())) == 0);
+		assertEquals(banknoteRunner.getPaidTotal(), BigDecimal.valueOf(note.getValue()));
 	}
 
+	@Test
+	public void testBanknoteCart() throws DisabledException, OverloadException {
+		Banknote note = new Banknote(Currency.getInstance("CAD"), 5);
+		ArrayList<Banknote> banknoteCart = new ArrayList<Banknote>();
+		banknoteCart.add(note);
+		bSlot.accept(note);
+		assertEquals(banknoteRunner.getBanknoteCart().get(0).getValue(), banknoteCart.get(0).getValue());
+	}
+	
+	@Test
+	public void testSumBanknotes() throws DisabledException, OverloadException {
+		Banknote note = new Banknote(Currency.getInstance("CAD"), 5);
+		bSlot.accept(note);
+		bSlot.accept(note);
+		assert(banknoteRunner.sumBanknotes().doubleValue() == 10.0);
+	}
 }
