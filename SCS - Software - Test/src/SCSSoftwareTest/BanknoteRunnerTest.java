@@ -106,4 +106,6 @@ public class BanknoteRunnerTest {
 		bSlot.accept(note);
 		assert(banknoteRunner.sumBanknotes().doubleValue() == 10.0);
 	}
+	
+	
 }

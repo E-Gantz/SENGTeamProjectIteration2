@@ -41,13 +41,14 @@ public class PaysWithCash {
 		this.banknoteOutputSlot = banknoteOutputSlot;
 		this.coinTray = coinTray;
 	}
-	
+
 	public BigDecimal sumCoinBanknote()
 	{
 		BigDecimal totalCoins = new BigDecimal((payswithcoin.getTotalCoins()).floatValue());
-		BigDecimal totalBanknotes = new BigDecimal((banknoterunner.sumBanknotes().floatValue()));
+		System.out.println("Coins:");
+		BigDecimal totalBanknotes = banknoterunner.sumBanknotes();
 		totalValue =  new BigDecimal(0).add(totalCoins);
-		totalValue.add(totalBanknotes);
+		totalValue = totalValue.add(totalBanknotes);
 		return totalValue;
 	}
 	
@@ -130,69 +131,89 @@ public class PaysWithCash {
 			
 			int count = 0;
 			while(count < 5) {
-				try {
-					banknotedispenser.get(100).emit();
-					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 100));
-				} catch (EmptyException e) {
-					count++;
+				while(count < 1) {
+					try {
+						banknotedispenser.get(100).emit();
+						banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 100));
+					} catch (EmptyException e) {
+						count++;
+					}
 				}
-				try {
-					banknotedispenser.get(50).emit();
-					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 50));
-				} catch (EmptyException e) {
-					count++;
+				while(count < 2) {
+					try {
+						banknotedispenser.get(50).emit();
+						banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 50));
+					} catch (EmptyException e) {
+						count++;
+					}
 				}
-				try {
-					banknotedispenser.get(20).emit();
-					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 20));
-				} catch (EmptyException e) {
-					count++;
+				while(count < 3) {
+					try {
+						banknotedispenser.get(20).emit();
+						banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 20));
+					} catch (EmptyException e) {
+						count++;
+					}
 				}
-				try {
-					banknotedispenser.get(10).emit();
-					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 10));
-				} catch (EmptyException e) {
-					count++;
+				while(count < 4) {
+					try {
+						banknotedispenser.get(10).emit();
+						banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 10));
+					} catch (EmptyException e) {
+						count++;
+					}
 				}
-				try {
-					banknotedispenser.get(5).emit();
-					banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 5));
-				} catch (EmptyException e) {
-					count++;
+				while(count < 5) {
+					try {
+						banknotedispenser.get(5).emit();
+						banknoteOutputSlot.emit(new Banknote(Currency.getInstance("CAD"), 5));
+					} catch (EmptyException e) {
+						count++;
+					}
 				}
 			}
 			
 			int count1 = 0;
 			while(count1 < 5) {
-				try {
-					coindispenser.get(BigDecimal.valueOf(2.00)).emit();
-					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(2.00)));
-				} catch (EmptyException e) {
-					count1++;
+				while(count1 < 1) {
+					try {
+						coindispenser.get(BigDecimal.valueOf(2.00)).emit();
+						coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(2.00)));
+					} catch (EmptyException e) {
+						count1++;
+					}
 				}
-				try {
-					coindispenser.get(BigDecimal.valueOf(1.00)).emit();
-					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(1.00)));
-				} catch (EmptyException e) {
-					count1++;
+				while(count1 < 2) {
+					try {
+						coindispenser.get(BigDecimal.valueOf(1.00)).emit();
+						coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(1.00)));
+					} catch (EmptyException e) {
+						count1++;
+					}
 				}
-				try {
-					coindispenser.get(BigDecimal.valueOf(0.25)).emit();
-					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.25)));
-				} catch (EmptyException e) {
-					count1++;
+				while(count1 < 3) {
+					try {
+						coindispenser.get(BigDecimal.valueOf(0.25)).emit();
+						coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.25)));
+					} catch (EmptyException e) {
+						count1++;
+					}
 				}
-				try {
-					coindispenser.get(BigDecimal.valueOf(0.10)).emit();
-					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.10)));
-				} catch (EmptyException e) {
-					count1++;
+				while(count < 4) {
+					try {
+						coindispenser.get(BigDecimal.valueOf(0.10)).emit();
+						coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.10)));
+					} catch (EmptyException e) {
+						count1++;
+					}
 				}
-				try {
-					coindispenser.get(BigDecimal.valueOf(0.05)).emit();
-					coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.05)));
-				} catch (EmptyException e) {
-					count1++;
+				while(count < 5) {
+					try {
+						coindispenser.get(BigDecimal.valueOf(0.05)).emit();
+						coinTray.accept(new Coin(Currency.getInstance("CAD"), BigDecimal.valueOf(0.05)));
+					} catch (EmptyException e) {
+						count1++;
+					}
 				}
 			}
 		}
