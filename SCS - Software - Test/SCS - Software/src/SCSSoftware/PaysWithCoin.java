@@ -24,7 +24,7 @@ public class PaysWithCoin implements CoinValidatorObserver{
 	{
 		this.slot = slot;
 		this.validator = validator;
-		
+		coinArray = new ArrayList<BigDecimal>();
 	}
 	
 	public void acceptCoin(Coin insertedCoin) throws DisabledException {
@@ -45,15 +45,15 @@ public class PaysWithCoin implements CoinValidatorObserver{
 	
 	public void sumTotal(ArrayList<BigDecimal> list) {
 		
-		BigDecimal total = new BigDecimal(0.00);
+		BigDecimal sum = new BigDecimal(0.00);
 		int i = 0;
 		
 		while(i < list.size()) {
-			total.add(list.get(i));
+			sum = sum.add(list.get(i));
 			i++;
 		}
 		
-		this.setTotalCoins(total);
+		this.setTotalCoins(sum);
 	}
 	
 	 public void setTotalCoins(BigDecimal total)
@@ -64,7 +64,7 @@ public class PaysWithCoin implements CoinValidatorObserver{
 
 	 public BigDecimal getTotalCoins()
 	 {   
-		 return getTotal();
+		 return total;
 	 }
 
 	
@@ -81,10 +81,6 @@ public class PaysWithCoin implements CoinValidatorObserver{
 
 	public ArrayList<BigDecimal> getCoinArray() {
 		return coinArray;
-	}
-
-	public void setCoinArray(ArrayList<BigDecimal> coinArray) {
-		this.coinArray = coinArray;
 	}
 
 	public BigDecimal getTotal() {
