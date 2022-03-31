@@ -41,12 +41,12 @@ public class PaysWithCard implements CardReaderObserver {
 	public void cardSwiped(CardReader reader) {
 		// IGNORE
 	}
+	
+	/* This method gathers customer information from the card reader and assigns it to local attributes*/
 
 	public void cardDataRead(CardReader reader, CardData data) {
 		
-		
 		if(this.checkout.getState()) {
-			
 			getcardholder = data.getCardholder();
 			gettype = data.getType();
 			
@@ -69,28 +69,31 @@ public class PaysWithCard implements CardReaderObserver {
 		}
 		
 	}
+	// HashMap getter method
 	
 	public HashMap<String,HashMap<String,String>> getPaymentResult()
 	{
 		return paymentResult;
 	}
 	
+	/* The constructor initializes the banking simulator classes and retrieves what is being charged to the customer from checkout */
 	public PaysWithCard(BankSimulator bank, Checkout checkout)
 	{	
 		//Remember to get transaction amount somewhere
 		this.bank = bank;
 		this.checkout = checkout;
 		this.transactionAmount= this.checkout.getTotalPrice();
-
 	}
 	
+	/* This method passes customer information gathered from the observer to the bank simulator class and awaits for a response 
+	 * if a successful transaction occurs, selected information is then saved into a HashMap to generate receipt information
+	 */
 	public void makePayment() throws BankDeclinedException {
 		/*
 		 * response is the UUID of the transaction 
 		 * (like if we were making a request to an api)
 		 * */
 		String response = bank.transactionCanHappen(getcardholder, getnumber, getcvv, gettype, transactionAmount, cvvrequired);
-
 
 		if(response != "NULL")
 		{
@@ -104,6 +107,8 @@ public class PaysWithCard implements CardReaderObserver {
 			  throw new BankDeclinedException("Card Declined");
 		}
 	}
+	
+	/* This method replaces every digit after the first four on a customers credit card with an X for receipt printing */
 
 	public String receiptCardNum()
 	{
@@ -126,7 +131,5 @@ public class PaysWithCard implements CardReaderObserver {
 		// TODO Auto-generated method stub
 		
 	}
-
-	// cannot be used unless checkout is true
 
 }
