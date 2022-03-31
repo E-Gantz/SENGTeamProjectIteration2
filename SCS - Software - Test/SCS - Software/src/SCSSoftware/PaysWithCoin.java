@@ -45,7 +45,7 @@ public class PaysWithCoin implements CoinValidatorObserver{
 	
 	public void sumTotal(ArrayList<BigDecimal> list) {
 		
-		BigDecimal sum = new BigDecimal(0.00);
+		BigDecimal sum = BigDecimal.valueOf(0.00);
 		int i = 0;
 		
 		while(i < list.size()) {
