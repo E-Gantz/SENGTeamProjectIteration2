@@ -12,11 +12,15 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 
 import SCSSoftware.ItemAdder;
 import SCSSoftware.ItemPlacer;
+import SCSSoftware.MemberCard;
+import SCSSoftware.Membership;
 import SCSSoftware.PrintReceipts;
+import SCSSoftware.PrinterMaintenance;
 import SCSSoftware.ProductCart;
 import SCSSoftware.ProductInventory;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 public class ReceiptTest {
 	public BarcodeScanner scanner;
@@ -34,33 +38,54 @@ public class ReceiptTest {
 	public ItemPlacer placer;
 	public ElectronicScale scale;
 	public int cartSize;
+	private HashMap<String, MemberCard> members;
+	private Membership membership;
+	private MemberCard card1;
+	ReceiptPrinter printer;
+	PrintReceipts receiptPrintout;
+	PrinterMaintenance printmaint;
+	
+	@Before
+	public void setUp() {
+		printer = new ReceiptPrinter();
+		cart = new ProductCart();
+		printmaint = new PrinterMaintenance();
+		printer.attach(printmaint);
+		printer.addInk(1);
+		printer.addPaper(1);
+		printer.endConfigurationPhase();
+		card1 = new MemberCard("00001", "jim bob");
+		members = new HashMap<String, MemberCard>();
+		members.put("00001", card1);
+		membership = new Membership(members);
+		membership.manualEntry("00001");
+		receiptPrintout = new PrintReceipts(cart, printer, membership);
+	}
+	
+	@After
+	public void tearDown() {
+		printer = null;
+		cart = null;
+		card1 = null;
+		members = null;
+		membership = null;
+		receiptPrintout = null;
+	}
 	
 	@Test
 	public void OneItemReceipt() {
-		ReceiptPrinter printer = new ReceiptPrinter();
-		cart = new ProductCart();
 		cart.addToCart(prod1);
-		printer.addInk(100);
-		printer.addPaper(100);
-		printer.endConfigurationPhase();
-		PrintReceipts receiptPrintout = new PrintReceipts(cart, printer);
 		receiptPrintout.printReceipt();
 		String returnedReceipt = printer.removeReceipt();
-		assertEquals(returnedReceipt, "Bread $5\n");
+		assertEquals(returnedReceipt, "Bread $5\n00001");
 	}
 	
 	@Test
 	public void TwoItemReceipt() {
-		ReceiptPrinter printer = new ReceiptPrinter();
-		cart = new ProductCart();
 		cart.addToCart(prod1);
 		cart.addToCart(prod2);
-		printer.addInk(100);
-		printer.addPaper(100);
-		printer.endConfigurationPhase();
-		PrintReceipts receiptPrintout = new PrintReceipts(cart, printer);
 		receiptPrintout.printReceipt();
 		String returnedReceipt = printer.removeReceipt();
-		assertEquals(returnedReceipt, "Bread $5\nMilk $10\n");
+		assertEquals(returnedReceipt, "Bread $5\nMilk $10\n00001");
 	}
 }
