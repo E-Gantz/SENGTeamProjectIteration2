@@ -9,7 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.Card;
+import org.lsmr.selfcheckout.ChipFailureException;
+import org.lsmr.selfcheckout.MagneticStripeFailureException;
 import org.lsmr.selfcheckout.Numeral;
+import org.lsmr.selfcheckout.TapFailureException;
 import org.lsmr.selfcheckout.devices.BarcodeScanner;
 import org.lsmr.selfcheckout.devices.CardReader;
 import org.lsmr.selfcheckout.devices.SimulationException;
@@ -85,25 +88,49 @@ public class PaysWithCardTest {
 		
 	}
 	
-	
 	 @Test 
 	 public void cardInsertDataTest() throws IOException, SimulationException 
 	 { 
-		 cardreader.insert(notapchip, pin);
+		 Boolean inserted = false;
+		 while(!inserted)
+		 {
+			 try 
+			 { 
+				 cardreader.insert(notapchip, pin);
+				 inserted = true;
+			 } catch (ChipFailureException e) {}
+		 }
 		 assertTrue(payswithcard.getPaymentResult() != null); 
 	 }
 	 
 	 @Test 
 	  public void cardTappedDataTest() throws IOException, SimulationException 
 	 { 
-		 cardreader.tap(tapnochip);
+		 Boolean inserted = false;
+		 while(!inserted)
+		 {
+			 try 
+			 { 
+				 cardreader.tap(tapnochip);
+				 inserted = true;
+			 } catch (TapFailureException e) {}
+		 }
 		 assertTrue(payswithcard.getPaymentResult() != null); 
 	 }
 	 
 	@Test
 	public void swipeDataTest() throws IOException, SimulationException
 	{
-		cardreader.swipe(notapnochip);
+		 Boolean inserted = false;
+		 while(!inserted)
+		 {
+			 try 
+			 {
+				 cardreader.swipe(notapnochip);
+				 inserted = true;
+			 } catch (MagneticStripeFailureException e) {}
+			
+		 } 
 		assertTrue(payswithcard.getPaymentResult() != null);
 	}
 	
@@ -136,6 +163,6 @@ public class PaysWithCardTest {
 		cardreader.insert(fakeCard, pin);
 		
 	}
-
 	
 }
+
