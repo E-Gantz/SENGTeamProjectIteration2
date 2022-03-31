@@ -62,6 +62,10 @@ public class BanknoteRunner {
 		return this.checkoutTotal;
 	}
 	
+	public void setCheckoutTotal(BigDecimal t) {
+		this.checkoutTotal = t;
+	}
+	
 	public BigDecimal getPaidTotal() {
 		return this.paidTotal;
 	}
